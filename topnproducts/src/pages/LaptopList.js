@@ -1,10 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const LaptopList = () => {
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
-  const [laptops, setLaptops] = useState([]);
   const [filters, setFilters] = useState({ minPrice: '', maxPrice: '', availability: '' });
+
+  // Sample data
+  const laptops = [
+    {"productName":"Laptop 1","price":2236,"rating":4.86,"discount":63,"availability":"out-of-stock"},
+    {"productName":"Laptop 10","price":7145,"rating":4.72,"discount":15,"availability":"out-of-stock"},
+    {"productName":"Laptop 8","price":511,"rating":4.64,"discount":87,"availability":"yes"},
+    {"productName":"Laptop 3","price":9102,"rating":4.6,"discount":98,"availability":"out-of-stock"},
+    {"productName":"Laptop 10","price":4101,"rating":4.52,"discount":37,"availability":"out-of-stock"},
+    {"productName":"Laptop 14","price":9254,"rating":4.23,"discount":56,"availability":"yes"},
+    {"productName":"Laptop 11","price":5683,"rating":3.63,"discount":56,"availability":"out-of-stock"},
+    {"productName":"Laptop 13","price":8686,"rating":3.6,"discount":24,"availability":"yes"},
+    {"productName":"Laptop 13","price":1244,"rating":3.17,"discount":45,"availability":"yes"},
+    {"productName":"Laptop 1","price":8521,"rating":2.32,"discount":91,"availability":"out-of-stock"}
+  ];
 
   const handleTokenChange = (event) => {
     setAccessToken(event.target.value);
@@ -17,30 +30,7 @@ const LaptopList = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetchData();
-  };
-
-  useEffect(() => {
-    if (accessToken) {
-      fetchData();
-    }
-  }, [accessToken]);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('http://20.244.56.144/test/companies/AMZ/categories/Laptop/products?top=10&minPrice=1&maxPrice=10000', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      const data = await response.json();
-      setLaptops(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // You can fetch data here with the provided access token if needed
   };
 
   // Apply filters
@@ -79,21 +69,15 @@ const LaptopList = () => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="5" className="text-center py-4">Loading...</td>
+            {filteredLaptops.map((laptop, index) => (
+              <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                <td className="border px-4 py-2">{laptop.productName}</td>
+                <td className="border px-4 py-2">${laptop.price}</td>
+                <td className="border px-4 py-2">{laptop.rating}</td>
+                <td className="border px-4 py-2">{laptop.discount}%</td>
+                <td className="border px-4 py-2">{laptop.availability}</td>
               </tr>
-            ) : (
-              filteredLaptops.map((laptop, index) => (
-                <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                  <td className="border px-4 py-2">{laptop.productName}</td>
-                  <td className="border px-4 py-2">${laptop.price}</td>
-                  <td className="border px-4 py-2">{laptop.rating}</td>
-                  <td className="border px-4 py-2">{laptop.discount}%</td>
-                  <td className="border px-4 py-2">{laptop.availability}</td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       </div>
