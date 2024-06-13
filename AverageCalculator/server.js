@@ -1,10 +1,11 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
+const cors = require('cors');
 const port =9876;
 app.use(cors({ origin: 'http://localhost:3000' }));
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+
 
 const WINDOW_SIZE = 10;
 const testServerUrl = 'http://20.244.56.144/test';
